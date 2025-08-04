@@ -1,4 +1,6 @@
-# --- Extract text for embedding ---
+import json
+
+
 def extract_text_chunks(profile):
     chunks = []
     for section in ["summary", "experience", "education", "courses", "languages", "skills"]:

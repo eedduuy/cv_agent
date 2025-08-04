@@ -1,8 +1,8 @@
 # main.py
 import streamlit as st
 import json
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import FAISS
+
+from app.config import MODEL_ID
 from app.profile.profile import load_user_profile
 from app.job.job_description import upload_job_description
 from app.LLM.embedding import extract_text_chunks
@@ -24,10 +24,11 @@ with tabs[0]:
     include_photo = st.checkbox("Include Photo in Resume", value=False)
     include_courses = st.checkbox("Include Courses & Certifications", value=True)
 
+'''
     if profile and job_description:
         # Prepare data for similarity search
         texts = extract_text_chunks(profile)
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        embeddings = HuggingFaceEmbeddings(model_name=MODEL_ID)
         vector_store = FAISS.from_texts(texts, embeddings)
 
         # Get top relevant entries
@@ -76,8 +77,11 @@ Job Description:
         st.markdown("## ✨ Generated Resume and Cover Letter")
         st.markdown(result)
         st.download_button("Download as Markdown", result, file_name="resume_and_letter.md")
-
+'''
 with tabs[1]:
     st.title("🧠 Interactive Profile Builder")
-    generate_profile_from_text()
+    st.subheader("🔍 Generate Profile from Text or CV")
+    raw_text = st.text_area("Paste your existing CV or descriptive text")
+    profile = generate_profile_from_text(raw_text)
+
 
