@@ -49,3 +49,55 @@ Education:
 Skills: Python, JavaScript, React, SQL, Git
 Languages: English (native), Spanish (intermediate)
 """
+
+CV_EXAMPLE_TO_PARSE = """
+
+Here is a JSON representation of the CV:
+
+```
+{
+  "name": "John Doe",
+  "title": "Software Engineer",
+  "contact": {
+    "email": "john.doe@email.com",
+    "phone": "+1234567890",
+    "linkedin": "linkedin.com/in/johndoe"
+  },
+  "photo": null,
+  "summary": "Experienced software engineer with 5 years in full-stack development.",
+  "experience": [
+    {
+      "role": "Senior Developer",
+      "company": "Tech Corp",
+      "dates": "2020-2024",
+      "description": "Developed web applications using Python and React"
+    },
+    {
+      "role": "Junior Developer",
+      "company": "StartupXYZ",
+      "dates": "2019-2020",
+      "description": "Built REST APIs and worked with databases"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor of Computer Science",
+      "institution": "University ABC",
+      "years": "2015-2019"
+    }
+  ],
+  "courses": [],
+  "languages": [
+    {
+      "language": "English",
+      "level": "native"
+    },
+    {
+      "language": "Spanish",
+      "level": "intermediate"
+    }
+  ],
+  "skills": ["Python", "JavaScript", "React", "SQL", "Git"]
+}
+```
+"""
