@@ -1,7 +1,7 @@
 import json
 import streamlit as st
 
-from app.config import DATA_DIR
+from app.config import JSON_DIR
 from app.profile.profile import generate_profile_from_text
 
 st.title("🧠 Interactive Profile Builder")
@@ -38,6 +38,5 @@ if profile:
 
 
 # Save to abilities.json in the data folder
-abilities_path = DATA_DIR / "abilities.json"
-with open(abilities_path, 'w', encoding='utf-8') as f:
+with open(JSON_DIR, 'w', encoding='utf-8') as f:
     json.dump(profile, f, indent=2, ensure_ascii=False)

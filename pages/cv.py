@@ -1,67 +1,34 @@
 import streamlit as st
-from app.profile.profile import load_user_profile
-from app.job.job_description import upload_job_description
+import json
+
+from app.job.cv_gen import generate_cv
 
 st.title("📄 AI-Powered CV & Cover Letter Generator")
 
-profile = load_user_profile()
-job_description = upload_job_description()
+if st.session_state.get("profile"):
+    profile = st.session_state.profile
+else:
+    uploaded = st.file_uploader("Upload your profile (JSON format)", type=["json"], key="upload_profile")
+    if uploaded:
+        profile = json.load(uploaded)
+        st.success("Profile loaded successfully!")
+        st.session_state.profile = profile
 
-include_summary = st.checkbox("Include Professional Summary", value=True)
-include_photo = st.checkbox("Include Photo in Resume", value=False)
-include_courses = st.checkbox("Include Courses & Certifications", value=True)
 
-'''
-    if profile and job_description:
-        # Prepare data for similarity search
-        texts = extract_text_chunks(profile)
-        embeddings = HuggingFaceEmbeddings(model_name=MODEL_ID)
-        vector_store = FAISS.from_texts(texts, embeddings)
+job_description = st.text_area("Job Description", key="job_description")
 
-        # Get top relevant entries
-        docs = vector_store.similarity_search(job_description, k=8)
-        relevant_profile = "\n".join([doc.page_content for doc in docs])
+if st.session_state.get("profile") and job_description and st.button("Generate CV"):
+    cv = generate_cv(profile, job_description)
 
-        # Prompt template
-        prompt_template = PromptTemplate(
-            input_variables=["profile", "job", "include_summary", "include_photo", "include_courses"],
-            template="""
-You are a CV generation assistant. Using the provided user profile and job description, generate:
+    st.subheader("Generated CV")
 
-1. A one-page resume in Markdown format with sections:
-   - Header (name, title, contact info, {include_photo})
-   - Professional Summary ({include_summary})
-   - Relevant Work Experience
-   - Education
-   - Courses & Certifications ({include_courses})
-   - Languages
-   - Skills
+    # Show the cv
+    st.markdown(cv, unsafe_allow_html=True)
 
-Only include sections if the user profile contains relevant information. Tailor the experience and wording to the job description provided.
+    st.download_button(
+        label="💾 Download CV",
+        data=cv,
+        file_name="cv.md",
+        mime="text/markdown",
+    )
 
-User Profile:
-{profile}
-
-Job Description:
-{job}
-"""
-        )
-
-        llm = HuggingFaceHub(
-            repo_id="meta-llama/Meta-Llama-3-8B-Instruct",
-            model_kwargs={"temperature": 0.5, "max_new_tokens": 1024}
-        )
-
-        chain = LLMChain(llm=llm, prompt=prompt_template)
-        result = chain.run(
-            profile=relevant_profile,
-            job=job_description,
-            include_summary=str(include_summary),
-            include_photo=str(include_photo),
-            include_courses=str(include_courses)
-        )
-
-        st.markdown("## ✨ Generated Resume and Cover Letter")
-        st.markdown(result)
-        st.download_button("Download as Markdown", result, file_name="resume_and_letter.md")
-'''

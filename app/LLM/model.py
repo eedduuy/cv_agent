@@ -38,6 +38,6 @@ def generate_text(prompt: str) -> str:
         ]
     )
 
-    return response
+    return response.choices[0].message.content
 
 

@@ -1,7 +1,5 @@
-import streamlit as st
 import json
 from ..LLM.model import generate_text
-from app.config import DATA_DIR
 
 from dotenv import load_dotenv
 
@@ -9,17 +7,8 @@ from ..utils import make_json
 
 load_dotenv()
 
-# --- Load user profile ---
-def load_user_profile():
-    uploaded = st.file_uploader("Upload your profile (JSON format)", type=["json"], key="upload_profile")
-    if uploaded:
-        profile = json.load(uploaded)
-        st.success("Profile loaded successfully!")
-        return profile
-    return None
-
 # --- Generate profile from raw input or CV text ---
-def generate_profile_from_text(raw_text : str):
+def generate_profile_from_text(raw_text : str) -> dict:
     prompt = f"""You are an assistant that extracts structured user profile data from unstructured text.
     Given the following text:
     {raw_text}
@@ -39,8 +28,7 @@ def generate_profile_from_text(raw_text : str):
     Respond only with a valid JSON object."""
         
     # Generar respuesta
-    response = generate_text(prompt)
-    generated_text = response.choices[0].message.content
+    generated_text = generate_text(prompt)
 
     try:
         profile_json = json.loads(generated_text)
@@ -51,3 +39,8 @@ def generate_profile_from_text(raw_text : str):
     
     return profile_json
 
+def generate_profile_from_file(file):
+    pass
+
+def generate_profile_from_cv(file):
+    pass
